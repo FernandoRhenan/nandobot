@@ -1,0 +1,42 @@
+.optionList {
+  display: flex;
+  gap: var(--space3);
+  width: 100%;
+}
+
+.column {
+  flex-direction: row;
+}
+
+.row {
+  flex-direction: column;
+}
+
+.optionItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space5);
+  padding: var(--space5);
+  border-radius: var(--radius2);
+  cursor: pointer;
+}
+
+.optionItem:hover {
+  background-color: var(--hover);
+}
+
+.radio {
+  width: var(--space7);
+  height: var(--space7);
+  flex: none;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.optionInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space2);
+  min-width: 0;
+}

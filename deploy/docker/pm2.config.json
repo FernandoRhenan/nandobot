@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "next",
+      "script": "server.js"
+    },
+    {
+      "name": "socket",
+      "script": "socket/server.mjs"
+    }
+  ]
+}

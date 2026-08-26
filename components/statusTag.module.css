@@ -1,0 +1,5 @@
+.statusTagArea {
+  padding: var(--space3) var(--space5);
+  border-radius: var(--radius3);
+  border: var(--edge-border);
+}

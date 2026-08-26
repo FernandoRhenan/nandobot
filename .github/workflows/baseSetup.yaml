@@ -1,0 +1,50 @@
+name: Base setup
+
+on: workflow_dispatch
+
+jobs:
+  install_docker:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: installing
+        uses: nekiro/ssh-job@main
+        with:
+          host: ${{ vars.VPS_IP_ADDRESS }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          user: ${{ secrets.VPS_USER }}
+          command: |
+
+            echo "###### Updating repository ######"
+
+            sudo apt-get -y update
+            sudo apt-get -y install ca-certificates curl
+            sudo install -m 0755 -d /etc/apt/keyrings
+            sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+            sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+            sudo tee /etc/apt/sources.list.d/docker.sources <<EOF
+            Types: deb
+            URIs: https://download.docker.com/linux/ubuntu
+            Suites: $(. /etc/os-release && echo "${UBUNTU_CODENAME:-$VERSION_CODENAME}")
+            Components: stable
+            Architectures: $(dpkg --print-architecture)
+            Signed-By: /etc/apt/keyrings/docker.asc
+            EOF
+
+            echo "###### Installing dependencies ######"
+
+            sudo apt-get -y update
+            sudo apt-get -y install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+
+            echo "###### Starting Docker ######"
+            sudo systemctl start docker
+            EXIT_CODE=$?
+
+            echo "###### Enabling Docker on reboot ######"
+            sudo systemctl enable docker
+
+            if [ $EXIT_CODE -gt 0 ]; then
+              echo "###### Something was wrong! ######"
+            else
+              echo "###### Docker was installed and is running! ######"
+            fi

@@ -1,0 +1,66 @@
+services:
+  nginx:
+    container_name: nginx
+    image: fernandorhenan/nginx:latest
+    networks:
+      - nandobot_network
+    ports:
+      - "443:443"
+    volumes:
+      - /etc/letsencrypt/live/<SUBSTITUA POR SEU DOMÍNIO>/:/etc/letsencrypt/live/<SUBSTITUA POR SEU DOMÍNIO>/:ro
+      - /etc/letsencrypt/archive/:/etc/letsencrypt/archive/:ro
+    environment:
+      - DOMAIN=${DOMAIN}
+  nextjs:
+    container_name: nextjs
+    image: fernandorhenan/nextjs-pm2:latest
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - DATABASE_URL=${DATABASE_URL}
+      # --- socket server (runs in the same container via PM2) ---
+      - REDIS_URL=${REDIS_URL}
+      - SOCKET_PORT=${SOCKET_PORT:-3010}
+      - SOCKET_CORS_ORIGIN=${SOCKET_CORS_ORIGIN}
+      # Next -> socket internal calls stay inside the container
+      - SOCKET_INTERNAL_URL=${SOCKET_INTERNAL_URL:-http://localhost:3010/internal}
+      - AUTH_PASSWORD=${AUTH_PASSWORD}
+      - AUTH_SECRET=${AUTH_SECRET}
+      # --- scraper ---
+      # Proxy residencial ("user:pass@host:porta"). Vazio = sai pelo IP do VPS,
+      # que a Amazon barra com captcha na maior parte dos acessos.
+      - SCRAPER_PROXY=${SCRAPER_PROXY:-}
+
+    networks:
+      - nandobot_network
+    ports:
+      - "3000:3000"
+    user: root
+    restart: unless-stopped
+    depends_on:
+      - nginx
+      - redis
+
+  redis:
+    container_name: redis
+    image: redis:7
+    environment:
+      - REDIS_HOST=${REDIS_HOST}
+      - REDIS_PORT=${REDIS_PORT}
+      - REDIS_URL=${REDIS_URL}
+
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - nandobot_network
+
+volumes:
+  redis_data:
+
+networks:
+  nandobot_network:

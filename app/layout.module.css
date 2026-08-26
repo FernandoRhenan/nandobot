@@ -1,0 +1,23 @@
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.header {
+  position: sticky;
+  top: 0;
+  width: 100%;
+  min-height: var(--header-height);
+  z-index: 999;
+  background-color: var(--bg-subtle);
+  border-bottom: var(--border) var(--edge-border);
+  display: flex;
+  align-items: center;
+  padding: 0 16px;
+}
+
+.themeButton {
+  width: 20px;
+  height: 20px;
+}

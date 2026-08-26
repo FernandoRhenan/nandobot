@@ -1,0 +1,192 @@
+/* ── Design tokens ──────────────────────────────────────────────────────── */
+:root {
+  --font-sans: var(--font-geist-sans, system-ui, sans-serif);
+  --font-mono: var(--font-geist-mono, ui-monospace, monospace);
+  --accent: #23c49e;
+  --accent-selected: #023c2f;
+  --accent-ink: #1a1a08;
+  --header-height: 55px;
+  --edge-border: solid 1px;
+  --radius0: 2px;
+  --radius1: 4px;
+  --radius2: 8px;
+  --radius3: 16px;
+  --radius4: 22px;
+  --radius5: 36px;
+  --radius6: 50px;
+  --space0: 1px;
+  --space1: 2px;
+  --space2: 3px;
+  --space3: 4px;
+  --space4: 6px;
+  --space5: 9px;
+  --space6: 12px;
+  --space7: 16px;
+  --space8: 20px;
+  --space9: 26px;
+  --space10: 32px;
+  --space11: 40px;
+  --space12: 50px;
+  --space13: 62px;
+  --space14: 76px;
+  --space15: 92px;
+  --space16: 110px;
+
+  color-scheme: dark;
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --bg: #0a0a0a;
+  --bg-subtle: #0d0d0d;
+  --panel: #0f0f0f;
+  --panel-2: #141414;
+  --hover: #1a1a1a;
+  --border: #232325;
+  --border-strong: #303033;
+  --text: #ededed;
+  --text-muted: #8b8b91;
+  --text-faint: #5a5a60;
+  --green: #3fb950;
+  --green-bg: rgba(63, 185, 80, 0.13);
+  --red: #e62c23;
+  --red-bg: rgba(248, 81, 73, 0.13);
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 40px rgba(0, 0, 0, 0.6);
+  --shimmer: rgba(255, 255, 255, 0.05);
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --background: #ffffff;
+  --foreground: #171717;
+  --bg: #ffffff;
+  --bg-subtle: #f6f7f9;
+  --panel: #ffffff;
+  --panel-2: #fbfbfb;
+  --hover: #f4f4f5;
+  --border: #e6e6e9;
+  --border-strong: #d4d4d8;
+  --text: #18181b;
+  --text-muted: #5c5c63;
+  --text-faint: #a5a5ae;
+  --green: #1a7f37;
+  --green-bg: #eaf6ed;
+  --red: #cf222e;
+  --red-bg: #fdedee;
+  --shadow: 0 1px 2px rgba(24, 24, 27, 0.05), 0 1px 3px rgba(24, 24, 27, 0.04);
+  --shadow-lg: 0 8px 30px rgba(24, 24, 27, 0.1);
+  --shimmer: rgba(0, 0, 0, 0.045);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+
+  html {
+    color-scheme: dark;
+  }
+}
+
+/* ── Shared keyframes (referenced by CSS modules) ───────────────────────── */
+@keyframes livePulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--green) 55%, transparent);
+  }
+
+  70% {
+    box-shadow: 0 0 0 5px transparent;
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+@keyframes chipPulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.3;
+  }
+}
+
+@keyframes shimmerSlide {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+@keyframes rowFlash {
+  0% {
+    background: color-mix(in srgb, var(--accent) 26%, transparent);
+  }
+
+  100% {
+    background: transparent;
+  }
+}
+
+/* ── Reusable: live indicator dot ───────────────────────────────────────── */
+.liveDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--green);
+  flex: none;
+  animation: livePulse 2s infinite;
+}
+
+/* ── Toaster ────────────────────────────────────────────────────────────── */
+.toaster {
+  background-color: red;
+}
+
+/* ── Base reset ─────────────────────────────────────────────────────────── */
+html {
+  height: 100%;
+}
+
+html,
+body {
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-sans);
+  font-size: 12px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+input {
+  font-family: var(--font-mono);
+}
+
+button {
+  font-family: var(--font-mono);
+}
+
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

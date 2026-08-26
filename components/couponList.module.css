@@ -1,0 +1,31 @@
+.couponList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space3);
+  width: 100%;
+  max-height: 240px;
+  overflow-y: auto;
+}
+
+.couponItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space5);
+  padding: var(--space5);
+  border-radius: var(--radius2);
+  border: var(--edge-border) var(--border);
+  background-color: var(--panel-2);
+  min-width: 0;
+  text-align: left;
+  cursor: pointer;
+}
+
+.couponItem:hover {
+  background-color: var(--hover);
+}
+
+.selected {
+  border-color: var(--accent);
+}

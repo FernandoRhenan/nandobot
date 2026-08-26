@@ -1,0 +1,118 @@
+.main {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.sideBarContainer {
+  background-color: var(--bg-subtle);
+  border-left: var(--border) var(--edge-border);
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.inputArea {
+  padding: var(--space8);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: var(--space5);
+  width: 100%;
+  flex: 1;
+}
+
+.inputBox {
+  margin-top: var(--space6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space5);
+  width: 100%;
+}
+
+.panelContainer {
+  flex: 4;
+  background-color: var(--bg);
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  padding: var(--space8);
+  gap: var(--space8);
+}
+
+.panelArea {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+.panelHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space4);
+}
+
+.panelProductSettings {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  gap: var(--space4);
+}
+
+.dateArea {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space4);
+}
+
+.panelContent {
+  margin-top: var(--space8);
+}
+
+.pipelineArea {
+  padding: var(--space8);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space4);
+  width: 100%;
+}
+
+.pipelineArea button {
+  margin-top: var(--space6);
+}
+
+.link {
+  color: var(--text-muted);
+}
+
+.link:hover {
+  color: var(--text);
+}
+
+.whatsappSetup {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: var(--space4);
+}
+
+.whatsAppStatus {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space4);
+}
+
+.whatsAppGroups {
+  padding-right: 10px;
+  overflow-y: auto;
+  max-height: 20%;
+}

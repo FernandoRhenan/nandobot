@@ -1,0 +1,115 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - "main"
+
+jobs:
+  nextBuild:
+    name: NextJs - docker image build and push
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Login into Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          push: true
+          tags: ${{vars.DOCKERHUB_TAG_NEXTJS}}
+          context: "{{ defaultContext }}"
+          file: "deploy/docker/Dockerfile.nextjs"
+          # NEXT_PUBLIC_* vars are inlined at build time, so they must be passed
+          # here — setting them in compose.prod.yaml has no effect on the client bundle.
+          build-args: |
+            NEXT_PUBLIC_SOCKET_URL=${{ vars.NEXT_PUBLIC_SOCKET_URL }}
+            NEXT_PUBLIC_FACEBOOK_PIXEL_ID=${{ vars.NEXT_PUBLIC_FACEBOOK_PIXEL_ID }}
+
+  nginxBuild:
+    name: Nginx - docker image build and push
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Login into Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Build and push
+        uses: docker/build-push-action@v7
+        with:
+          push: true
+          tags: ${{vars.DOCKERHUB_TAG_NGINX}}
+          context: "{{ defaultContext }}"
+          file: "deploy/docker/Dockerfile.nginx"
+
+  deploy:
+    needs:
+      - nextBuild
+      - nginxBuild
+
+    name: Deploy to production
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Push files to webserver
+        run: |
+          rsync --mkpath -zav --exclude=.env* \
+          --rsh="ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+          deploy/docker/compose.prod.yaml \
+          deploy/setup.sh \
+          scrapers \
+          ${{ secrets.VPS_USER }}@${{ vars.VPS_IP_ADDRESS }}:/app/
+
+      - name: Cleanup SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
+          rm -f ~/.ssh/known_hosts
+
+  start_all:
+    needs:
+      - nextBuild
+      - nginxBuild
+      - deploy
+    name: Start Docker and all the services
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout files
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+
+      - name: Run setup.sh
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+          ${{ secrets.VPS_USER }}@${{ vars.VPS_IP_ADDRESS }} \
+          "chmod +x /app/setup.sh && /app/setup.sh"
+
+      - name: Cleanup SSH key
+        if: always()
+        run: |
+          rm -f ~/.ssh/deploy_key
+          rm -f ~/.ssh/known_hosts

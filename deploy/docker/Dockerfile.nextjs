@@ -1,0 +1,144 @@
+# ============================================
+# Stage 1: Full dependencies (dev + prod) for building
+# ============================================
+
+# IMPORTANT: Node.js Version Maintenance
+# This Dockerfile uses Node.js 24.13.0-slim, which was the latest LTS version at the time of writing.
+# To ensure security and compatibility, regularly update the NODE_VERSION ARG to the latest LTS version.
+ARG NODE_VERSION=24.13.0-slim
+
+FROM node:${NODE_VERSION} AS dependencies
+
+WORKDIR /app
+
+# Copy package-related files first to leverage Docker's caching mechanism
+COPY package.json package-lock.json* ./
+
+# Install project dependencies with frozen lockfile for reproducible builds
+RUN --mount=type=cache,target=/root/.npm \
+  if [ -f package-lock.json ]; then \
+    npm ci --no-audit --no-fund; \
+  else \
+    echo "No lockfile found." && exit 1; \
+  fi
+
+# ============================================
+# Stage 2: Production-only dependencies for the socket runtime
+# ============================================
+# The Next.js standalone output only traces the modules the app graph reaches.
+# The socket server (baileys, socket.io, node-cron, pg, redis, ...) is a separate
+# process, so it needs its own production node_modules at runtime.
+
+FROM node:${NODE_VERSION} AS prod-deps
+
+WORKDIR /app
+
+COPY package.json package-lock.json* ./
+
+RUN --mount=type=cache,target=/root/.npm \
+  if [ -f package-lock.json ]; then \
+    npm ci --omit=dev --ignore-scripts --no-audit --no-fund; \
+  else \
+    echo "No lockfile found." && exit 1; \
+  fi
+
+# ============================================
+# Stage 3: Build Next.js (standalone) + bundle the socket server
+# ============================================
+
+FROM node:${NODE_VERSION} AS builder
+
+WORKDIR /app
+
+COPY --from=dependencies /app/node_modules ./node_modules
+
+# Copy application source code
+COPY . .
+
+ENV NODE_ENV=production
+
+# NEXT_PUBLIC_* vars are inlined into the client bundle at build time, so every
+# value the browser needs must be provided here (not at runtime).
+# Pass with: docker build --build-arg NEXT_PUBLIC_SOCKET_URL=https://radar-de-ofertas.com ...
+ARG NEXT_PUBLIC_SOCKET_URL
+ENV NEXT_PUBLIC_SOCKET_URL=${NEXT_PUBLIC_SOCKET_URL}
+
+# Next.js collects completely anonymous telemetry data about general usage.
+# Uncomment to disable it during build:
+# ENV NEXT_TELEMETRY_DISABLED=1
+
+# `npm run build` runs `next build && npm run socket:build`, producing:
+#   - .next/standalone, .next/static  (Next.js app)
+#   - dist/socket/server.mjs          (esbuild-bundled socket server)
+RUN if [ -f package-lock.json ]; then \
+    npm run build; \
+  else \
+    echo "No lockfile found." && exit 1; \
+  fi
+
+# ============================================
+# Stage 4: Runtime image (Next standalone + socket, both under PM2)
+# ============================================
+
+FROM node:${NODE_VERSION} AS runner
+
+WORKDIR /app
+
+ENV NODE_ENV=production
+ENV PORT=3000
+ENV HOSTNAME="0.0.0.0"
+
+USER root
+
+# --- Scraper system dependencies ---
+# Same packages as the `install_chrome` job in .github/workflows/baseSetup.yaml,
+# so scrapers/get_product_info.py runs inside this container instead of on the
+# VPS host. Installed before the app layers to keep it cached across code changes.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      chromium \
+      python3-tk \
+      python3-dev \
+      xvfb \
+      xauth \
+      fonts-liberation \
+      tini \
+      python3-pip \
+      python3-venv \
+    && rm -rf /var/lib/apt/lists/*
+
+# --- Python virtualenv for the scraper ---
+# The venv path must stay in sync with models/scraper.ts, which runs
+# /app/.venv/bin/python3 through `tini -s -- xvfb-run -a` in production.
+COPY requirements.txt ./requirements.txt
+
+RUN python3 -m venv /app/.venv && \
+    /app/.venv/bin/pip install --no-cache-dir --upgrade pip && \
+    /app/.venv/bin/pip install --no-cache-dir -r /app/requirements.txt
+
+COPY scrapers ./scrapers
+
+# --- Next.js standalone output ---
+COPY --from=builder --chown=node:node /app/public ./public
+
+RUN mkdir .next && chown node:node .next
+
+# Automatically leverage output traces to reduce image size
+# https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+
+# --- Socket server (bundle + its own production node_modules) ---
+# server.mjs is ESM; the .mjs extension forces Node to load it as a module
+# regardless of the surrounding package.json.
+COPY --from=builder --chown=node:node /app/dist/socket/server.mjs ./socket/server.mjs
+COPY --from=prod-deps --chown=node:node /app/node_modules ./socket/node_modules
+
+# --- PM2 process file (runs both apps) ---
+COPY --from=builder --chown=node:node /app/deploy/docker/pm2.config.json ./pm2.config.json
+
+RUN npm install pm2 -g
+
+# 3000: Next.js HTTP  |  3010: socket.io / internal HTTP
+EXPOSE 3000 3010
+
+CMD ["pm2-runtime", "pm2.config.json"]

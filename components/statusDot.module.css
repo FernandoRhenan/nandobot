@@ -1,0 +1,6 @@
+.statusDotArea {
+  display: inline-block;
+  width: var(--space5);
+  height: var(--space5);
+  border-radius: 50%;
+}

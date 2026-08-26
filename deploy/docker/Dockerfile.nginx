@@ -1,0 +1,11 @@
+FROM nginx:alpine
+
+RUN rm -f /etc/nginx/sites-enabled/default
+RUN rm -f /etc/nginx/sites-available/default
+RUN rm -f /etc/nginx/conf.d/default.conf
+
+COPY ./nginx/nginx.conf /etc/nginx/nginx.conf
+COPY ./nginx/mime.types /etc/nginx/mime.types
+COPY ./nginx/conf.d/ /etc/nginx/conf.d/
+
+EXPOSE 443

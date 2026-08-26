@@ -1,0 +1,3 @@
+.lineBorderEdge {
+  border-top: var(--border) var(--edge-border);
+}

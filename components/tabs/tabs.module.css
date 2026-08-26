@@ -1,0 +1,7 @@
+.link {
+  color: var(--text-muted);
+}
+
+.link:hover {
+  color: var(--text);
+}

@@ -1,0 +1,20 @@
+name: Automated Tests
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  vitest:
+    name: Vitest Ubuntu
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "lts/krypton"
+
+      - run: npm ci
+
+      - run: npm test

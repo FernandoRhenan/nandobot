@@ -1,0 +1,51 @@
+.table {
+  border: var(--border) var(--edge-border);
+  border-radius: var(--radius2);
+  display: flex;
+  flex-direction: column;
+  background-color: var(--panel-2);
+}
+
+.thead {
+  padding: var(--space6);
+}
+
+.tr {
+  display: flex;
+  justify-content: space-around;
+}
+
+.th {
+  width: 100%;
+  text-align: left;
+  color: var(--text-faint);
+}
+
+.tbody {
+  display: flex;
+  flex-direction: column;
+}
+
+.trData {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: var(--space6);
+  border-top: var(--border) var(--edge-border);
+  background-color: var(--panel);
+  transition: 125ms;
+}
+
+.trDataHover:hover {
+  background-color: var(--panel-2);
+  cursor: pointer;
+}
+
+.trEmpty {
+  justify-content: flex-start;
+}
+
+.td {
+  width: 100%;
+  text-align: left;
+}

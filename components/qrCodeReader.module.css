@@ -1,0 +1,13 @@
+.qrCodeArea {
+  display: inline-flex;
+  padding: var(--space7);
+  background: #ffffff;
+  border: var(--edge-border) var(--border);
+  border-radius: var(--radius2);
+}
+
+.qrCodeArea svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}

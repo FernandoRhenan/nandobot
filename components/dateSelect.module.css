@@ -1,0 +1,28 @@
+.input {
+  max-width: 350px;
+  max-height: 50px;
+  min-width: 100px;
+  min-height: 30px;
+  width: 100%;
+  height: 40px;
+  border: var(--edge-border) var(--border-strong);
+  background-color: var(--panel-2);
+  border-radius: var(--radius2);
+  padding: 0 10px;
+  color: var(--text);
+  transition:
+    border-color 0.12s,
+    box-shadow 0.12s;
+  outline: none;
+}
+
+.input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 32%, transparent);
+  background: var(--panel);
+}
+
+.input::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  filter: invert(0.6);
+}

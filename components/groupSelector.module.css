@@ -1,0 +1,37 @@
+.groupList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space3);
+  width: 100%;
+}
+
+.groupItem {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--space5);
+  padding: var(--space5);
+  border-radius: var(--radius2);
+  border: var(--edge-border) var(--border);
+  background-color: var(--panel-2);
+  cursor: pointer;
+}
+
+.groupItem:hover {
+  background-color: var(--hover);
+}
+
+.checkbox {
+  width: var(--space7);
+  height: var(--space7);
+  flex: none;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+.groupInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space2);
+  min-width: 0;
+}
