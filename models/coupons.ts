@@ -1,4 +1,5 @@
 import database from "@/infra/database";
+import DateFormater from "@/helpers/DateFormater";
 
 export default class Coupons implements ICoupons {
   async createCoupon(coupon: ICreateCoupon): Promise<ICreatedCoupon> {
@@ -44,17 +45,26 @@ export default class Coupons implements ICoupons {
     return command.rows[0];
   }
 
-  async getAllCoupons(): Promise<ICreatedCoupons> {
+  async getAllCoupons(
+    initialDatetime: Date,
+    finalDatetime: Date,
+  ): Promise<ICreatedCoupons> {
+    const initialDate = DateFormater.onlyDate(initialDatetime);
+    const finalDate = DateFormater.onlyDate(finalDatetime);
+
     const command = await database.query({
       text: `
         SELECT
           *
         FROM
           coupons
+        WHERE
+          DATE(created_at) BETWEEN $1 AND $2
         ORDER BY
           created_at DESC
         ;
       `,
+      values: [initialDate, finalDate],
     });
 
     return command.rows as ICreatedCoupons;
@@ -63,7 +73,10 @@ export default class Coupons implements ICoupons {
 
 export interface ICoupons {
   createCoupon(coupon: ICreateCoupon): Promise<ICreatedCoupon>;
-  getAllCoupons(): Promise<ICreatedCoupons>;
+  getAllCoupons(
+    initialDatetime: Date,
+    finalDatetime: Date,
+  ): Promise<ICreatedCoupons>;
 }
 
 export interface ICreateCoupon {

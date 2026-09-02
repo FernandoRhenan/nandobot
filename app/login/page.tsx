@@ -1,7 +1,7 @@
 "use client";
 
-import { FormEvent, Suspense, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { ChangeEvent, Suspense, useState } from "react";
+import { useRouter } from "next/navigation";
 import Button from "@/components/Button";
 import styles from "./page.module.css";
 
@@ -15,12 +15,11 @@ export default function Login() {
 
 function LoginForm() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  async function handleSubmit(e: FormEvent) {
+  async function handleSubmit(e: ChangeEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
@@ -38,8 +37,7 @@ function LoginForm() {
         return;
       }
 
-      const from = searchParams.get("from");
-      router.replace(from && from.startsWith("/") ? from : "/publisher");
+      router.replace("/scraper");
     } catch {
       setError("Erro de conexão. Tente novamente.");
     } finally {

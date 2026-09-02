@@ -1,3 +1,4 @@
+import DateFormater from "@/helpers/DateFormater";
 import ResponseFilter from "@/helpers/ResponseFilter";
 import {
   ICreatedProduct,
@@ -250,14 +251,22 @@ function useUrlManager() {
     setAllProducts(data ?? []);
   }, []);
 
-  const getAllCoupons = useCallback(async () => {
-    const response = await fetch("/api/v1/coupons");
-    const responseBody = ResponseFilter.parse<ICreatedCoupons>(
-      await response.json(),
-    );
-    const data = responseBody?.data;
-    setCoupons(data ?? []);
-  }, []);
+  const getAllCoupons = useCallback(
+    async (
+      initialDate: string = DateFormater.today(),
+      finalDate: string = DateFormater.today(),
+    ) => {
+      const response = await fetch(
+        `/api/v1/coupons?initialDate=${initialDate}&finalDate=${finalDate}`,
+      );
+      const responseBody = ResponseFilter.parse<ICreatedCoupons>(
+        await response.json(),
+      );
+      const data = responseBody?.data;
+      setCoupons(data ?? []);
+    },
+    [],
+  );
 
   function updateProductRequestStatus(id: number, status: ScrapingStatus) {
     setAllProductsRequest((prev) => {

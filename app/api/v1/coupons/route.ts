@@ -1,4 +1,5 @@
 import { withErrorHandler } from "@/helpers/ApiHandler";
+import DateFormater from "@/helpers/DateFormater";
 import { Response } from "@/infra/responses";
 import Coupons, {
   ICreateCoupon,
@@ -6,7 +7,8 @@ import Coupons, {
   ICreatedCoupons,
 } from "@/models/coupons";
 import { createCoupon } from "@/validators/coupon";
-import { NextResponse } from "next/server";
+import date from "@/validators/date";
+import { NextRequest, NextResponse } from "next/server";
 
 export const POST = withErrorHandler(async (request) => {
   const body: ICreateCoupon = await request.json();
@@ -27,9 +29,21 @@ export const POST = withErrorHandler(async (request) => {
   return NextResponse.json(responseBody, { status: responseBody.status_code });
 });
 
-export const GET = withErrorHandler(async () => {
+export const GET = withErrorHandler(async (request: NextRequest) => {
+  const { searchParams } = new URL(request.url);
+
+  const initialDatetime = date.parse(
+    searchParams.get("initialDate") ?? DateFormater.today(),
+  );
+  const finalDatetime = date.parse(
+    searchParams.get("finalDate") ?? DateFormater.today(),
+  );
+
   const coupons = new Coupons();
-  const allCoupons = await coupons.getAllCoupons();
+  const allCoupons = await coupons.getAllCoupons(
+    initialDatetime,
+    finalDatetime,
+  );
 
   const responseBody = new Response<ICreatedCoupons>({
     error: false,

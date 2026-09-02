@@ -1,5 +1,5 @@
 import styles from "@/components/discountTypeSelect.module.css";
-import { DiscountType } from "@/app/api/v1/coupons/route";
+import { DiscountType } from "@/models/coupons";
 
 const discountTypeOptions: { value: DiscountType; label: string }[] = [
   { value: "percentage", label: "Porcentagem (%)" },

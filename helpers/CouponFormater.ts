@@ -26,16 +26,16 @@ export default class CouponFormater {
 
   static formatCoupons(coupons: ICreatedCoupons): string {
     if (coupons.length > 1) {
-      const text = ["🏷️ Use os cupons:"];
+      const text = ["*💥 Combo de cupons*", "Use os cupons:"];
 
       coupons.forEach((coupon) => {
-        const couponText = `> ${coupon.name}`;
+        const couponText = `🏷️ \`${coupon.name}\``;
         text.push(couponText);
       });
 
       return text.join("\n");
     } else {
-      return ["🏷️ Use o cupom:", `> ${coupons[0].name.toUpperCase()}`].join(
+      return ["Use o cupom:", `🏷️ \`${coupons[0].name.toUpperCase()}\``].join(
         "\n",
       );
     }
@@ -44,26 +44,21 @@ export default class CouponFormater {
   static applyDiscount(price: number, coupons: ICreatedCoupon[]): number {
     if (typeof coupons !== "object") return price;
 
-    let newPrice = 0;
     let currentPrice = price;
+
     coupons.forEach((coupon) => {
       if (coupon.discount_type === "percentage") {
-        const isolatedPrice = price;
-        newPrice = Math.round(
-          isolatedPrice - isolatedPrice * (coupon.discount / 100),
-        );
-      } else {
-        const isolatedPrice = price;
-        newPrice = isolatedPrice - coupon.discount;
-      }
-      const currentDiscount = (price - newPrice) / 100;
+        const valueToBeDiscounted = Math.round(price * (coupon.discount / 100));
+        currentPrice -= valueToBeDiscounted;
 
-      if (coupon.discount_limit && currentDiscount > coupon.discount_limit) {
-        const fixedDiscount = currentDiscount - coupon.discount_limit;
-        newPrice += fixedDiscount;
+        const limit = (coupon.discount_limit || 0) * 100;
+        if (limit && valueToBeDiscounted > limit) {
+          const fixedValue = valueToBeDiscounted - limit;
+          currentPrice += fixedValue;
+        }
+      } else {
+        currentPrice -= coupon.discount * 100;
       }
-      // Não esta descontando o segundo cupom, apenas o primeiro
-      currentPrice = currentPrice - (currentPrice - newPrice);
     });
     return currentPrice;
   }

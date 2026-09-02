@@ -1,6 +1,6 @@
 const encoder = new TextEncoder();
 
-export const AUTH_COOKIE = "nandobot_session";
+export const AUTH_COOKIE = "radar_session";
 export const AUTH_MAX_AGE_SECONDS = 60 * 60 * 24 * 7; // 7 days
 
 function getSecret(): string {

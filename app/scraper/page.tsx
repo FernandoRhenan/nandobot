@@ -72,6 +72,12 @@ export default function ScraperPage() {
   );
   const [selectedRequestProductsDate, setSelectedRequestProductsDate] =
     useState<string>(DateFormater.today);
+  const [couponsInitialDate, setCouponsInitialDate] = useState<string>(
+    DateFormater.today,
+  );
+  const [couponsFinalDate, setCouponsFinalDate] = useState<string>(
+    DateFormater.today,
+  );
 
   useEffect(() => {
     urlManager.getAllUrls(selectedRequestProductsDate);
@@ -84,9 +90,9 @@ export default function ScraperPage() {
   }, [urlManager.getAllProducts, selectedProductsDate]);
 
   useEffect(() => {
-    urlManager.getAllCoupons();
+    urlManager.getAllCoupons(couponsInitialDate, couponsFinalDate);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [urlManager.getAllCoupons]);
+  }, [urlManager.getAllCoupons, couponsInitialDate, couponsFinalDate]);
 
   const [currentScrapingTab, setCurrentScrapingTab] =
     useState<ScrapingTabs>("all");
@@ -131,6 +137,26 @@ export default function ScraperPage() {
           <Text size={12} bold color="faint">
             CUPONS
           </Text>
+          <div className={styles.couponsDateArea}>
+            <div className={styles.dateArea}>
+              <Text size={12} bold color="faint">
+                DE
+              </Text>
+              <DateSelect
+                value={couponsInitialDate}
+                onChange={setCouponsInitialDate}
+              />
+            </div>
+            <div className={styles.dateArea}>
+              <Text size={12} bold color="faint">
+                ATÉ
+              </Text>
+              <DateSelect
+                value={couponsFinalDate}
+                onChange={setCouponsFinalDate}
+              />
+            </div>
+          </div>
           <CouponList
             coupons={urlManager.coupons}
             selectedCouponsId={urlManager.selectedCoupons}
@@ -180,15 +206,15 @@ export default function ScraperPage() {
               />
               <InputText
                 type="number"
-                placeholder="Limite de desconto (R$)"
-                value={urlManager.couponDiscountLimit}
-                onChange={urlManager.setCouponDiscountLimit}
-              />
-              <InputText
-                type="number"
                 placeholder="Compra mínima (R$)"
                 value={urlManager.couponMinPurchase}
                 onChange={urlManager.setCouponMinPurchase}
+              />
+              <InputText
+                type="number"
+                placeholder="Limite de desconto (R$)"
+                value={urlManager.couponDiscountLimit}
+                onChange={urlManager.setCouponDiscountLimit}
               />
               <Button
                 type="submit"
