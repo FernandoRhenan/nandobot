@@ -1,3 +1,9 @@
+![Scraper](https://fernandorhenan.github.io/public/scraping.png
+)
+
+![Publicador de posts](https://fernandorhenan.github.io/public/publisher.png
+)
+
 # Passo a passo de como rodar a aplicação.
 
 Veja os pré-requisitos:
