@@ -17,6 +17,7 @@ Veja os pré-requisitos:
 ## Em desenvolvimento / localmente
 
 Dependências:
+• Git
 
 • nodejs 24.x
 
