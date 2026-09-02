@@ -144,4 +144,4 @@ Não se esqueça de substituir '<ALTERE PELO SEU DOMÍNIO>' pelo seu domínio ca
 
 ## Em caso de dúvidas
 
-Você pode criar uma nova issue no Github ou entrar em contato através do LinkedIn do fundador do projeto. O link estará em seu perfil.
+Você pode criar uma nova issue no Github ou entrar em contato através do LinkedIn do fundador do projeto. O link estará em seu perfil aqui do Github.
