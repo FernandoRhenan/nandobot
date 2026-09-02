@@ -26,6 +26,12 @@ Dependências:
 
 • docker 29.x
 
+### Primeiros passos:
+
+1° - rodar `git clone https://github.com/FernandoRhenan/nandobot.git`
+
+2° - entrar via terminal na pasta que foi clonada: `cd nandobot`
+
 ### Instalando dependencias do Python:
 
 1° - rodar: `python3 -m venv .venv`
