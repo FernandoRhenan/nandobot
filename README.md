@@ -122,7 +122,7 @@ Defina as `Secrets`:
 
 1° - Entre via ssh no seu servidor.
 
-2° - Rode `nano /app/.env/production` e insira as variáveis que estão no projeto local no arquivo `.env.production`.
+2° - Rode `nano /app/.env.production` e insira as variáveis que estão no projeto local no arquivo `.env.production`.
 
 3° - Preencha os valores das variáveis.
 
