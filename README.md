@@ -1,8 +1,6 @@
-![Scraper](https://fernandorhenan.github.io/public/scraping.png
-)
+![Scraper](https://fernandorhenan.github.io/public/scraping.png)
 
-![Publicador de posts](https://fernandorhenan.github.io/public/publisher.png
-)
+![Publicador de posts](https://fernandorhenan.github.io/public/publisher.png)
 
 # Passo a passo de como rodar a aplicação.
 
@@ -122,7 +120,7 @@ Defina as `Secrets`:
 
 1° - Entre via ssh no seu servidor.
 
-2° - Rode `nano /app/.env/production` e insira as variáveis que estão no projeto local no arquivo `.env.production`.
+2° - Rode `nano /app/.env.production` e insira as variáveis que estão no projeto local no arquivo `.env.production`.
 
 3° - Preencha os valores das variáveis.
 
