@@ -1,7 +1,6 @@
 import baileys from "@/infra/baileys";
 import { type GroupMetadata } from "baileys";
 import redis, { redisKeys } from "@/infra/redis";
-import { ServiceError } from "@/infra/error";
 import Products, { TCreatedProductAndUrl } from "@/models/products";
 import PriceFormater from "@/helpers/PriceFormater";
 import CouponFormater from "@/helpers/CouponFormater";
@@ -71,10 +70,7 @@ export default class Publisher {
         const stringifiedItem = JSON.stringify(item);
         stringifiedProductsIds.push(stringifiedItem);
       });
-      const numberOfEnqueuedProducts = await redisConnection.rPush(
-        keyName,
-        stringifiedProductsIds,
-      );
+      await redisConnection.rPush(keyName, stringifiedProductsIds);
     });
   }
 

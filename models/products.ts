@@ -1,5 +1,4 @@
 import database from "@/infra/database";
-import Scraper from "./scraper";
 import DateFormater from "@/helpers/DateFormater";
 import { ICreatedCoupons } from "./coupons";
 
