@@ -8,6 +8,7 @@ import SmallImage from "../SmallImage";
 import Link from "next/link";
 import CouponTag from "@/components/CouponTag";
 import DiscountedPrice from "@/components/DiscountedPrice";
+import { LinkIcon } from "@phosphor-icons/react";
 
 interface IAllProductsTab {
   allProducts: ICreatedProducts | undefined;
@@ -66,11 +67,23 @@ const columns: ITableColumn<ICreatedProduct>[] = [
     render: (item) => <StatusTag flag={item.status} />,
     flex: 2,
   },
-
   {
     header: "DATA DE CRIAÇÃO",
     render: (item) => DateFormater.format(item.created_at),
     flex: 2,
+  },
+  {
+    header: "PÁGINA",
+    render: (item) => (
+      <Link
+        href={"/product/" + item.id}
+        referrerPolicy="no-referrer"
+        target="_blank"
+      >
+        <LinkIcon size={28} color="var(--text)" weight="light" />
+      </Link>
+    ),
+    flex: 1,
   },
 ];
 

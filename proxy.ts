@@ -4,10 +4,17 @@ import { AUTH_COOKIE, verifyAuthToken } from "@/helpers/auth";
 // Public paths that never require authentication.
 const PUBLIC_PATHS = new Set(["/", "/login", "/api/v1/login"]);
 
+// Public prefixes: every product has its own public sell page.
+const PUBLIC_PREFIXES = ["/product/"];
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  if (PUBLIC_PATHS.has(pathname)) {
+  const isPublic =
+    PUBLIC_PATHS.has(pathname) ||
+    PUBLIC_PREFIXES.some((prefix) => pathname.startsWith(prefix));
+
+  if (isPublic) {
     return NextResponse.next();
   }
 
