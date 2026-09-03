@@ -3,7 +3,6 @@ import Coupons from "@/models/coupons";
 import {
   ICreatedProductRequest,
   ICreatedProductsRequest,
-  IProductRequest,
 } from "@/models/scraper";
 import authenticatedFetch from "@/tests/authenticatedFetch";
 import Orchestrator from "@/tests/orchestrator";
