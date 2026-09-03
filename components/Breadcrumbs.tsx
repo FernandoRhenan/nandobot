@@ -8,6 +8,12 @@ export default function Breadcrumbs() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
+  if (pathname.startsWith("/product/")) {
+    return (
+      <span className={styles.brand}>{process.env.NEXT_PUBLIC_HEAD_NAME}</span>
+    );
+  }
+
   return (
     <nav className={styles.breadcrumbs} aria-label="breadcrumb">
       <Link href="/" className={styles.link}>

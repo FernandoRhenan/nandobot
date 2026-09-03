@@ -1,0 +1,46 @@
+.coupon {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space6);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space1);
+  min-width: 0;
+}
+
+.name {
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: bold;
+  letter-spacing: 0.06em;
+  word-break: break-all;
+}
+
+.discount {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.copy {
+  flex: none;
+  padding: var(--space4) var(--space7);
+  border: var(--edge-border) var(--border-strong);
+  border-radius: var(--radius2);
+  background-color: var(--panel);
+  color: var(--text);
+  font-size: 12px;
+  cursor: pointer;
+  transition:
+    border-color 0.12s,
+    color 0.12s;
+}
+
+.copy:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
