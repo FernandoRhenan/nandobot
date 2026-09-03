@@ -18,6 +18,14 @@ Veja os pré-requisitos:
 
 ---
 
+## Preencha as variáveis
+
+Comece preenchendo:
+
+• NEXT_PUBLIC_URL=<SEU_DOMÍNIO_OU_LOCALHOST>
+
+• NEXT_PUBLIC_HEAD_NAME=<NOME_DO_SEU_APP_/_SISTEMA_/_EMPRESA>
+
 ## Em desenvolvimento / localmente
 
 Dependências:

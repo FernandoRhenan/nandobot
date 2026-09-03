@@ -30,3 +30,13 @@
 .current {
   color: var(--text);
 }
+
+.brand {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: bold;
+}

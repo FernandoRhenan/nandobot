@@ -16,7 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Nandobot",
+  title: process.env.NEXT_PUBLIC_HEAD_NAME || "",
   description:
     "As melhores promoções, direto no seu WhatsApp. Entre no grupo e garanta os melhores preços.",
 };

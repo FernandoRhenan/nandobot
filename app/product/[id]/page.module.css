@@ -1,0 +1,160 @@
+.page {
+  display: flex;
+  justify-content: center;
+  padding: var(--space15) var(--space7) var(--space12);
+}
+
+.card {
+  display: flex;
+  gap: var(--space11);
+  width: 100%;
+  max-width: 900px;
+  padding: var(--space10);
+  border: var(--edge-border) var(--border);
+  background-color: var(--panel);
+  border-radius: var(--radius3);
+  box-shadow: var(--shadow-lg);
+}
+
+.gallery {
+  position: relative;
+  flex: 1;
+  display: flex;
+  align-self: center;
+  border: var(--edge-border) var(--border);
+  background-color: var(--panel-2);
+  border-radius: var(--radius2);
+  overflow: hidden;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.discount {
+  position: absolute;
+  top: var(--space6);
+  left: var(--space6);
+  padding: var(--space3) var(--space6);
+  border-radius: var(--radius6);
+  background-color: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.details {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: var(--space7);
+}
+
+.store {
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 13px;
+}
+
+.name {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1.35;
+  color: var(--text);
+}
+
+.prices {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space3);
+}
+
+.oldPrice {
+  color: var(--text-faint);
+  font-size: 14px;
+  text-decoration: line-through;
+}
+
+.price {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 34px;
+  font-weight: bold;
+  line-height: 1.1;
+}
+
+.priceHint {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.coupons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space5);
+  padding: var(--space7);
+  border: var(--edge-border) var(--border);
+  background-color: var(--panel-2);
+  border-radius: var(--radius2);
+}
+
+.couponsTitle {
+  color: var(--text-muted);
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 48px;
+  border-radius: var(--radius2);
+  background-color: var(--accent);
+  color: var(--accent-ink);
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: bold;
+  transition: filter 0.12s;
+}
+
+.cta:hover {
+  filter: brightness(1.08);
+}
+
+.warning {
+  color: var(--text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.updatedAt {
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding: var(--space7) var(--space5) var(--space10);
+  }
+
+  .card {
+    flex-direction: column;
+    gap: var(--space8);
+    padding: var(--space7);
+  }
+
+  .name {
+    font-size: 18px;
+  }
+
+  .price {
+    font-size: 28px;
+  }
+}

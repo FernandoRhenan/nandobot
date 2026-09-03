@@ -58,7 +58,7 @@ export default class Products implements IProducts {
     const command = await database.query({
       text: `
         SELECT
-          *,
+          products.*,
           product_requests.url AS url,
           COALESCE(
             (
@@ -99,7 +99,7 @@ export default class Products implements IProducts {
     const command = await database.query({
       text: `
         SELECT
-          *,
+          products.*,
           product_requests.url AS url,
           COALESCE(
             (
